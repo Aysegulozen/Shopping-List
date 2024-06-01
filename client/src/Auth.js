@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { gapi } from 'gapi-script';
 
-const CLIENT_ID = '654502246790-groc6p9vsheub14rd5hcb7recmfsnnrp.apps.googleusercontent.com'; // Buraya kendi Google Client ID'nizi ekleyin
+const CLIENT_ID = '654502246790-groc6p9vsheub14rd5hcb7recmfsnnrp.apps.googleusercontent.com'; 
 
-function Auth() {
+function Auth({ onSuccess, onFailure }) {
   useEffect(() => {
     function start() {
       gapi.client.init({
@@ -19,19 +19,14 @@ function Auth() {
           'onsuccess': onSuccess,
           'onfailure': onFailure,
         });
+      }).catch((error) => {
+        console.error('Error initializing gapi.client:', error);
+        alert(`Error initializing gapi.client: ${error.message || error.details || JSON.stringify(error)}`);
       });
     }
 
     gapi.load('client:auth2', start);
-  }, []);
-
-  const onSuccess = (googleUser) => {
-    console.log('Login Success: currentUser:', googleUser.getBasicProfile());
-  };
-
-  const onFailure = (error) => {
-    console.log('Login failed: ', error);
-  };
+  }, [onSuccess, onFailure]);
 
   return (
     <div>
