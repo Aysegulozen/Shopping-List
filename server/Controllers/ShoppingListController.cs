@@ -3,15 +3,21 @@ using System.Collections.Generic;
 
 namespace ShoppingListApi.Controllers
 {
+    public class ShoppingItem
+    {
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class ShoppingListController : ControllerBase
     {
-        private static readonly List<string> ShoppingList = new List<string>
+        private static readonly List<ShoppingItem> ShoppingList = new List<ShoppingItem>
         {
-            "Milk",
-            "Bread",
-            "Cheese"
+            new ShoppingItem { Name = "Milk", Quantity = 1 },
+            new ShoppingItem { Name = "Bread", Quantity = 1 },
+            new ShoppingItem { Name = "Cheese", Quantity = 1 }
         };
 
         [HttpGet]
@@ -21,16 +27,16 @@ namespace ShoppingListApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] string item)
+        public IActionResult Post([FromBody] ShoppingItem item)
         {
             ShoppingList.Add(item);
             return Ok(ShoppingList);
         }
 
-        [HttpDelete("{item}")]
-        public IActionResult Delete(string item)
+        [HttpDelete("{name}")]
+        public IActionResult Delete(string name)
         {
-            ShoppingList.Remove(item);
+            ShoppingList.RemoveAll(i => i.Name == name);
             return Ok(ShoppingList);
         }
     }
