@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      fetch('http://localhost:5033/api/shoppinglist')
+      fetch('https://localhost:5033/api/shoppinglist')
         .then(response => response.json())
         .then(data => setItems(data))
         .catch(error => console.error('Error fetching shopping list:', error));
@@ -17,7 +17,7 @@ function App() {
   }, [user]);
 
   const addItem = () => {
-    fetch('http://localhost:5033/api/shoppinglist', {
+    fetch('https://localhost:5033/api/shoppinglist', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ function App() {
   };
 
   const deleteItem = (name) => {
-    fetch(`http://localhost:5033/api/shoppinglist/${name}`, {
+    fetch(`https://localhost:5033/api/shoppinglist/${name}`, {
       method: 'DELETE',
     })
     .then(response => response.json())
@@ -38,14 +38,13 @@ function App() {
     .catch(error => console.error('Error deleting item:', error));
   };
 
-  const onLoginSuccess = (googleUser) => {
-    const profile = googleUser.getBasicProfile();
-    setUser(profile);
-    console.log('Login Success: currentUser:', profile);
+  const onLoginSuccess = (credentialResponse) => {
+    console.log('Login Success:', credentialResponse);
+    setUser(credentialResponse);
   };
 
-  const onLoginFailure = (error) => {
-    console.log('Login failed: ', error);
+  const onLoginFailure = () => {
+    console.log('Login failed');
   };
 
   return (
@@ -54,7 +53,7 @@ function App() {
         <Auth onSuccess={onLoginSuccess} onFailure={onLoginFailure} />
         {user && (
           <div>
-            <h2>Welcome, {user.getName()}</h2>
+            <h2>Welcome, User</h2>
             <h1>Shopping List</h1>
             <ul>
               {items.map(item => (
