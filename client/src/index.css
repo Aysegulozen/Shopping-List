@@ -12,25 +12,3 @@ body {
   background-color: white;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  border: 1px solid #000;
-  padding: 8px;
-  text-align: left;
-}
-
-thead {
-  background-color: #91a3b0;
-  color: #fff;
-}
-
-input[type="text"], input[type="number"] {
-  width: 100%;
-  padding: 8px;
-  margin: 4px 0;
-  box-sizing: border-box;
-}

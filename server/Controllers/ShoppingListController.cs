@@ -8,11 +8,11 @@ namespace ShoppingListApi.Controllers
     [Route("api/[controller]")]
     public class ShoppingListController : ControllerBase
     {
-        private static readonly List<ShoppingItem> ShoppingList = new List<ShoppingItem>
+        private static readonly List<Item> ShoppingList = new List<Item>
         {
-            new ShoppingItem { Name = "Milk", Quantity = "1 l", Important = false, Bought = false },
-            new ShoppingItem { Name = "Bread", Quantity = "2 pcs", Important = false, Bought = false },
-            new ShoppingItem { Name = "Cheese", Quantity = "500 gr", Important = false, Bought = false }
+            new Item { Name = "Milk", Quantity = "1 l", Important = false, Bought = false },
+            new Item { Name = "Bread", Quantity = "2 pcs", Important = false, Bought = false },
+            new Item { Name = "Cheese", Quantity = "500 g", Important = false, Bought = false }
         };
 
         [HttpGet]
@@ -22,9 +22,9 @@ namespace ShoppingListApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] ShoppingItem item)
+        public IActionResult Post([FromBody] Item newItem)
         {
-            ShoppingList.Add(item);
+            ShoppingList.Add(newItem);
             return Ok(ShoppingList);
         }
 
@@ -41,7 +41,7 @@ namespace ShoppingListApi.Controllers
         }
     }
 
-    public class ShoppingItem
+    public class Item
     {
         public string Name { get; set; } = string.Empty;
         public string Quantity { get; set; } = string.Empty;
