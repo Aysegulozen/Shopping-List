@@ -5,11 +5,11 @@
 @import 'flowbite';
 
 
-@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Delicious+Handrawn&display=swap');
 
 body {
-  font-family: 'Architects Daughter', cursive;
-  background-color: silver;
+  font-family: "Gochi Hand", cursive;
+  background-color: white;
 }
 
 table {

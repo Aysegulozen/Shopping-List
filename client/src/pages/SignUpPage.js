@@ -1,66 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import './SignUpPage.css'; // Yeni bir CSS dosyası oluşturuyoruz
+import guestAvatar from '../assets/images/user.icon.jpeg'; // Guest avatar image
+import './SignUpPage.css';
 
-const CLIENT_ID = '654502246790-groc6p9vsheub14rd5hcb7recmfsnnrp.apps.googleusercontent.com';
+const CLIENT_ID = '654502246790-78ejui2sfbgdhaa6k0pq1nnr49stjv10.apps.googleusercontent.com';
 
 function SignUpPage({ onLoginSuccess, onLoginFailure }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const user = { name: email, email };
-    onLoginSuccess(user);
-  };
-
   const handleGuestLogin = () => {
-    const user = { name: 'Guest', email: 'guest@example.com' };
+    const user = { name: 'Guest', email: 'guest@example.com', picture: guestAvatar };
     onLoginSuccess(user);
   };
 
   return (
     <div className="signup-container flex flex-col items-center justify-center min-h-screen">
-      <form
-        className="signup-form  bg-opacity-80 p-6 rounded-lg  flex flex-col gap-4"
-        onSubmit={handleSubmit}
-      >
-        <div>
-          <label htmlFor="email1" className="block mb-2">Your email</label>
-          <input
-            id="email1"
-            type="email"
-            placeholder="name@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password1" className="block mb-2">Your password</label>
-          <input
-            id="password1"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
-            required
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <input type="checkbox" id="remember" className="rounded" />
-          <label htmlFor="remember">Remember me</label>
-        </div>
-        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">Submit</button>
-      </form>
-
-      <div className="oauth-buttons mt-4 flex flex-col gap-4 items-center">
+      <h1 className="text-4xl font-bold mb-4">Welcome to Shopping List</h1>
+      <p className="text-xl mb-8">Please Sign up</p>
+      <div className="oauth-buttons flex flex-col gap-4 items-center">
         <GoogleOAuthProvider clientId={CLIENT_ID}>
           <GoogleLogin
             onSuccess={credentialResponse => {
               console.log(credentialResponse);
-              const user = { name: 'Google User', email: 'googleuser@example.com' };
+              const user = {
+                name: credentialResponse.profileObj.name,
+                email: credentialResponse.profileObj.email,
+                picture: credentialResponse.profileObj.imageUrl
+              };
               onLoginSuccess(user);
             }}
             onError={() => {
@@ -69,6 +33,8 @@ function SignUpPage({ onLoginSuccess, onLoginFailure }) {
             }}
           />
         </GoogleOAuthProvider>
+
+        <p className="text-xl mb-8">or</p>
 
         <button
           onClick={handleGuestLogin}

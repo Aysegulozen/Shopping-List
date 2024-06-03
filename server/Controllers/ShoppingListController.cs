@@ -1,23 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShoppingListApi.Controllers
 {
-    public class ShoppingItem
-    {
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-    }
-
     [ApiController]
     [Route("api/[controller]")]
     public class ShoppingListController : ControllerBase
     {
         private static readonly List<ShoppingItem> ShoppingList = new List<ShoppingItem>
         {
-            new ShoppingItem { Name = "Milk", Quantity = 1 },
-            new ShoppingItem { Name = "Bread", Quantity = 1 },
-            new ShoppingItem { Name = "Cheese", Quantity = 1 }
+            new ShoppingItem { Name = "Milk", Quantity = "1 l", Important = false, Bought = false },
+            new ShoppingItem { Name = "Bread", Quantity = "2 pcs", Important = false, Bought = false },
+            new ShoppingItem { Name = "Cheese", Quantity = "500 gr", Important = false, Bought = false }
         };
 
         [HttpGet]
@@ -36,8 +31,21 @@ namespace ShoppingListApi.Controllers
         [HttpDelete("{name}")]
         public IActionResult Delete(string name)
         {
-            ShoppingList.RemoveAll(i => i.Name == name);
-            return Ok(ShoppingList);
+            var item = ShoppingList.FirstOrDefault(i => i.Name == name);
+            if (item != null)
+            {
+                ShoppingList.Remove(item);
+                return Ok(ShoppingList);
+            }
+            return NotFound();
         }
+    }
+
+    public class ShoppingItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Quantity { get; set; } = string.Empty;
+        public bool Important { get; set; }
+        public bool Bought { get; set; }
     }
 }
