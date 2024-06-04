@@ -1,6 +1,7 @@
 import React from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import guestAvatar from '../assets/images/user.icon.jpeg';
+import { decodeJwtResponse } from '../jwtDecode';
 import './SignUpPage.css';
 
 const CLIENT_ID = '654502246790-78ejui2sfbgdhaa6k0pq1nnr49stjv10.apps.googleusercontent.com';
@@ -8,12 +9,12 @@ const CLIENT_ID = '654502246790-78ejui2sfbgdhaa6k0pq1nnr49stjv10.apps.googleuser
 function SignUpPage({ onLoginSuccess, onLoginFailure }) {
   const handleGoogleLoginSuccess = (credentialResponse) => {
     console.log('Google Login Success:', credentialResponse);
-
     try {
+      const decodedToken = decodeJwtResponse(credentialResponse.credential);
       const user = {
-        name: credentialResponse.profileObj.name,
-        email: credentialResponse.profileObj.email,
-        picture: credentialResponse.profileObj.imageUrl,
+        name: decodedToken.name,
+        email: decodedToken.email,
+        picture: decodedToken.picture,
       };
       onLoginSuccess(user);
     } catch (error) {
