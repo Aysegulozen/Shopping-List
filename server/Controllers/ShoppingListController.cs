@@ -8,48 +8,71 @@ namespace ShoppingListApi.Controllers
     [Route("api/[controller]")]
     public class ShoppingListController : ControllerBase
     {
-        private static readonly List<Item> ShoppingList = new List<Item>
+        private static readonly Dictionary<string, List<Item>> UserShoppingLists = new Dictionary<string, List<Item>>
         {
-            new Item { Name = "Milk", Quantity = "1 l", Important = false, Bought = false },
-            new Item { Name = "Bread", Quantity = "2 pcs", Important = false, Bought = false },
-            new Item { Name = "Cheese", Quantity = "500 g", Important = false, Bought = false }
+            { "guest@example.com", new List<Item>
+                {
+                    new Item { Name = "Milk", Quantity = "1 l", Important = false, Bought = false },
+                    new Item { Name = "Bread", Quantity = "2 pcs", Important = false, Bought = false },
+                    new Item { Name = "Cheese", Quantity = "500 g", Important = false, Bought = false }
+                }
+            }
         };
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("{userId}")]
+        public IActionResult Get(string userId)
         {
-            return Ok(ShoppingList);
-        }
-
-        [HttpPost]
-        public IActionResult Post([FromBody] Item newItem)
-        {
-            ShoppingList.Add(newItem);
-            return Ok(ShoppingList);
-        }
-
-        [HttpDelete("{name}")]
-        public IActionResult Delete(string name)
-        {
-            var item = ShoppingList.FirstOrDefault(i => i.Name == name);
-            if (item != null)
+            if (UserShoppingLists.ContainsKey(userId))
             {
-                ShoppingList.Remove(item);
-                return Ok(ShoppingList);
+                return Ok(UserShoppingLists[userId]);
+            }
+            return Ok(new List<Item>());
+        }
+
+        [HttpPost("{userId}")]
+        public IActionResult Post(string userId, [FromBody] List<Item> newItems)
+        {
+            if (UserShoppingLists.ContainsKey(userId))
+            {
+                UserShoppingLists[userId] = newItems;
+            }
+            else
+            {
+                UserShoppingLists[userId] = newItems;
+            }
+            return Ok(UserShoppingLists[userId]);
+        }
+
+        [HttpDelete("{userId}/{name}")]
+        public IActionResult Delete(string userId, string name)
+        {
+            if (UserShoppingLists.ContainsKey(userId))
+            {
+                var item = UserShoppingLists[userId].FirstOrDefault(i => i.Name == name);
+                if (item != null)
+                {
+                    UserShoppingLists[userId].Remove(item);
+                    return Ok(UserShoppingLists[userId]);
+                }
+                return NotFound();
             }
             return NotFound();
         }
 
-        [HttpPut("{name}")]
-        public IActionResult Put(string name, [FromBody] Item updatedItem)
+        [HttpPut("{userId}/{name}")]
+        public IActionResult Put(string userId, string name, [FromBody] Item updatedItem)
         {
-            var item = ShoppingList.FirstOrDefault(i => i.Name == name);
-            if (item != null)
+            if (UserShoppingLists.ContainsKey(userId))
             {
-                item.Quantity = updatedItem.Quantity;
-                item.Important = updatedItem.Important;
-                item.Bought = updatedItem.Bought;
-                return Ok(ShoppingList);
+                var item = UserShoppingLists[userId].FirstOrDefault(i => i.Name == name);
+                if (item != null)
+                {
+                    item.Quantity = updatedItem.Quantity;
+                    item.Important = updatedItem.Important;
+                    item.Bought = updatedItem.Bought;
+                    return Ok(UserShoppingLists[userId]);
+                }
+                return NotFound();
             }
             return NotFound();
         }

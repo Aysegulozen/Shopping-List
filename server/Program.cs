@@ -26,7 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Remove or comment out the following line to disable HTTPS redirection
+// app.UseHttpsRedirection();
 
 app.UseCors("AllowAllOrigins");
 
