@@ -39,6 +39,20 @@ namespace ShoppingListApi.Controllers
             }
             return NotFound();
         }
+
+        [HttpPut("{name}")]
+        public IActionResult Put(string name, [FromBody] Item updatedItem)
+        {
+            var item = ShoppingList.FirstOrDefault(i => i.Name == name);
+            if (item != null)
+            {
+                item.Quantity = updatedItem.Quantity;
+                item.Important = updatedItem.Important;
+                item.Bought = updatedItem.Bought;
+                return Ok(ShoppingList);
+            }
+            return NotFound();
+        }
     }
 
     public class Item
