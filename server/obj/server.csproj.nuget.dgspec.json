@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/aysegulozen/ShoppingListApp/server/server.csproj": {}
+    "/Users/aysegulozen/Shopping-List/server/server.csproj": {}
   },
   "projects": {
-    "/Users/aysegulozen/ShoppingListApp/server/server.csproj": {
+    "/Users/aysegulozen/Shopping-List/server/server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/aysegulozen/ShoppingListApp/server/server.csproj",
+        "projectUniqueName": "/Users/aysegulozen/Shopping-List/server/server.csproj",
         "projectName": "server",
-        "projectPath": "/Users/aysegulozen/ShoppingListApp/server/server.csproj",
+        "projectPath": "/Users/aysegulozen/Shopping-List/server/server.csproj",
         "packagesPath": "/Users/aysegulozen/.nuget/packages/",
-        "outputPath": "/Users/aysegulozen/ShoppingListApp/server/obj/",
+        "outputPath": "/Users/aysegulozen/Shopping-List/server/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/aysegulozen/.nuget/NuGet/NuGet.Config"
