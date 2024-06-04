@@ -10,7 +10,8 @@ function NavBar({ user, onSignOut }) {
         <img src={logo} className="mr-3 h-6 sm:h-9" alt="Grocery Shopping-List Logo" />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Grocery Shopping-List</span>
       </Navbar.Brand>
-      <div className="flex md:order-2">
+      <div className="flex items-center md:order-2">
+        <span className="text-blake mr-4">{user ? `Welcome, ${user.name}` : "Welcome, Guest"}</span>
         <Dropdown
           arrowIcon={false}
           inline
@@ -22,9 +23,6 @@ function NavBar({ user, onSignOut }) {
             <span className="block text-sm">{user ? user.name : "User Name"}</span>
             <span className="block truncate text-sm font-medium">{user ? user.email : "name@example.com"}</span>
           </Dropdown.Header>
-          <Dropdown.Item>Dashboard</Dropdown.Item>
-          <Dropdown.Item>Settings</Dropdown.Item>
-          <Dropdown.Item>Earnings</Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item onClick={onSignOut}>Sign out</Dropdown.Item>
         </Dropdown>
