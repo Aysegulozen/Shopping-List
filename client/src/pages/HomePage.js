@@ -12,17 +12,17 @@ function HomePage({ user, onSignOut }) {
   const [modalVisible, setModalVisible] = useState(false);
   const userId = user?.email || 'guest@example.com';
 
-  useEffect(() => {
-    fetch(`http://localhost:5033/api/shoppinglist/${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        const toBuy = data.filter(item => !item.bought);
-        const bought = data.filter(item => item.bought);
-        setToBuyItems(toBuy);
-        setBoughtItems(bought);
-      })
-      .catch(error => console.error('Error fetching shopping list:', error));
-  }, [userId]);
+useEffect(() => {
+  fetch(`http://localhost:5033/api/shoppinglist/${userId}`)
+    .then(response => response.json())
+    .then(data => {
+      const toBuy = data.filter(item => !item.bought);
+      const bought = data.filter(item => item.bought);
+      setToBuyItems(toBuy);
+      setBoughtItems(bought);
+    })
+    .catch(error => console.error('Error fetching shopping list:', error));
+}, [userId]);
 
   const saveItems = (updatedItems) => {
     fetch(`http://localhost:5033/api/shoppinglist/${userId}`, {
