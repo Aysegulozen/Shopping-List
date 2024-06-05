@@ -49,27 +49,36 @@ function HomePage({ user, onSignOut }) {
       important: false,
       bought: false
     };
-
+  
     const updatedToBuyItems = [...toBuyItems, newItem];
-    saveItems(updatedToBuyItems.concat(boughtItems));
-
+    const sortedItems = updatedToBuyItems.sort((a, b) => a.name.localeCompare(b.name)); // Yeni eklenen öğeleri alfabetik olarak sıralama
+    saveItems(sortedItems.concat(boughtItems));
+  
     setNewItemName('');
     setNewItemQuantity('');
     setNewItemUnit('pcs');
   };
-
   const deleteItem = (name, fromBoughtList = false) => {
-    const updatedToBuyItems = toBuyItems.filter(item => item.name !== name);
-    const updatedBoughtItems = fromBoughtList ? boughtItems.filter(item => item.name !== name) : boughtItems;
-
-    saveItems(updatedToBuyItems.concat(updatedBoughtItems));
+    if (fromBoughtList) {
+      const updatedBoughtItems = boughtItems.filter(item => item.name !== name);
+      saveItems(toBuyItems.concat(updatedBoughtItems));
+    } else {
+      const updatedToBuyItems = toBuyItems.filter(item => item.name !== name);
+      saveItems(updatedToBuyItems.concat(boughtItems));
+    }
   };
-
   const toggleImportant = (name) => {
     const updatedItems = toBuyItems.map(item =>
       item.name === name ? { ...item, important: !item.important } : item
     );
-    saveItems(updatedItems.concat(boughtItems));
+  
+    const sortedItems = updatedItems.sort((a, b) => {
+      if (a.important && !b.important) return -1;
+      if (!a.important && b.important) return 1;
+      return 0;
+    });
+  
+    saveItems(sortedItems.concat(boughtItems));
   };
 
   const toggleBought = (name) => {
@@ -107,7 +116,6 @@ function HomePage({ user, onSignOut }) {
       saveItems([...toBuyItems, newItem].concat(boughtItems));
     }
   };
-
   const openModal = () => {
     setModalVisible(true);
   };
