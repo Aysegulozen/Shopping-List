@@ -119,9 +119,12 @@ export const InfoModal = ({ modalVisible, closeModal }) => {
         How to Use
       </Modal.Header>
       <Modal.Body>
-        <p><FaStar className="inline text-yellow-500" /> Mark an item as important</p>
-        <p><FaCheck className="inline text-green-500" /> Mark an item as bought</p>
-        <p><FaTrash className="inline text-red-500" /> Delete an item</p>
+        <p><FaStar className="inline text-yellow-500" /> Mark an item as important to move it to the top of the list.</p>
+        <p><FaArrowUp className="inline text-blue-500" /> Move an item up in the list.</p>
+        <p><FaArrowDown className="inline text-blue-500" /> Move an item down in the list.</p>
+        <p><FaPlus className="inline text-blue-500" /> Copy an item from the "Previously Bought" list to the "To Buy" list.</p>
+        <p><FaCheck className="inline text-green-500" /> Mark an item as bought to move it to the "Previously Bought" list.</p>
+        <p><FaTrash className="inline text-red-500" /> Delete an item from the list.</p>
         <p>To add an item, enter the name and quantity, select the unit, and click "Add Item".</p>
       </Modal.Body>
       <Modal.Footer>

@@ -149,7 +149,7 @@ function HomePage({ user, onSignOut }) {
           />
         </div>
         <div className="w-1/2">
-          <h2 className="text-3xl font-bold mb-4">Bought</h2>
+          <h2 className="text-3xl font-bold mb-4">Previously Bought</h2>
           <ShoppingListTable
             items={boughtItems}
             toggleImportant={toggleImportant}
