@@ -1,22 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'flowbite-react'; // Button bileşenini içe aktarın
+import { Button } from 'flowbite-react';
 import { ShoppingListTable, AddItemForm, InfoModal } from '../components/ShoppingList';
 import { FaInfoCircle } from 'react-icons/fa';
 
 function HomePage({ user, onSignOut }) {
-  const [items, setItems] = useState([]);
+  const [toBuyItems, setToBuyItems] = useState([]);
+  const [boughtItems, setBoughtItems] = useState([]);
   const [newItemName, setNewItemName] = useState('');
   const [newItemQuantity, setNewItemQuantity] = useState('');
   const [newItemUnit, setNewItemUnit] = useState('pcs');
   const [modalVisible, setModalVisible] = useState(false);
+  const userId = user?.email || 'guest@example.com';
 
   useEffect(() => {
-    const userId = user ? user.email : 'guest@example.com';
     fetch(`http://localhost:5033/api/shoppinglist/${userId}`)
       .then(response => response.json())
-      .then(data => setItems(data))
+      .then(data => {
+        const toBuy = data.filter(item => !item.bought);
+        const bought = data.filter(item => item.bought);
+        setToBuyItems(toBuy);
+        setBoughtItems(bought);
+      })
       .catch(error => console.error('Error fetching shopping list:', error));
-  }, [user]);
+  }, [userId]);
+
+  const saveItems = (updatedItems) => {
+    fetch(`http://localhost:5033/api/shoppinglist/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedItems),
+    })
+      .then(response => response.json())
+      .then(data => {
+        const toBuy = data.filter(item => !item.bought);
+        const bought = data.filter(item => item.bought);
+        setToBuyItems(toBuy);
+        setBoughtItems(bought);
+      })
+      .catch(error => console.error('Error saving shopping list:', error));
+  };
 
   const addItem = () => {
     const newItem = {
@@ -26,61 +50,62 @@ function HomePage({ user, onSignOut }) {
       bought: false
     };
 
-    const userId = user ? user.email : 'guest@example.com';
-    fetch(`http://localhost:5033/api/shoppinglist/${userId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([...items, newItem]),
-    })
-    .then(response => response.json())
-    .then(data => setItems(data))
-    .catch(error => console.error('Error adding item:', error));
+    const updatedToBuyItems = [...toBuyItems, newItem];
+    saveItems(updatedToBuyItems.concat(boughtItems));
 
     setNewItemName('');
     setNewItemQuantity('');
     setNewItemUnit('pcs');
   };
 
-  const deleteItem = (name) => {
-    const userId = user ? user.email : 'guest@example.com';
-    fetch(`http://localhost:5033/api/shoppinglist/${userId}/${encodeURIComponent(name)}`, {
-        method: 'DELETE',
-    })
-    .then(response => response.json())
-    .then(data => setItems(data))
-    .catch(error => console.error('Error deleting item:', error));
+  const deleteItem = (name, fromBoughtList = false) => {
+    const updatedToBuyItems = toBuyItems.filter(item => item.name !== name);
+    const updatedBoughtItems = fromBoughtList ? boughtItems.filter(item => item.name !== name) : boughtItems;
+
+    saveItems(updatedToBuyItems.concat(updatedBoughtItems));
   };
 
   const toggleImportant = (name) => {
-    const updatedItems = items.map(item =>
+    const updatedItems = toBuyItems.map(item =>
       item.name === name ? { ...item, important: !item.important } : item
     );
-    setItems(updatedItems);
+    saveItems(updatedItems.concat(boughtItems));
   };
 
   const toggleBought = (name) => {
-    const updatedItems = items.map(item =>
-      item.name === name ? { ...item, bought: !item.bought } : item
-    );
-    setItems(updatedItems);
-  };
-
-  const addOrIncrementItem = (name, quantity, unit) => {
-    const updatedItems = items.map(item =>
-      item.name === name ? { ...item, quantity: parseInt(item.quantity) + quantity + ' ' + unit } : item
-    );
-    setItems(updatedItems);
+    const itemToToggle = toBuyItems.find(item => item.name === name);
+    if (itemToToggle) {
+      const updatedToBuyItems = toBuyItems.filter(item => item.name !== name);
+      const updatedBoughtItems = [...boughtItems, { ...itemToToggle, bought: true, important: false }];
+      saveItems(updatedToBuyItems.concat(updatedBoughtItems));
+    } else {
+      const itemToToggle = boughtItems.find(item => item.name === name);
+      const updatedBoughtItems = boughtItems.filter(item => item.name !== name);
+      const updatedToBuyItems = [...toBuyItems, { ...itemToToggle, bought: false }];
+      saveItems(updatedToBuyItems.concat(updatedBoughtItems));
+    }
   };
 
   const moveItem = (name, direction) => {
-    const index = items.findIndex(item => item.name === name);
+    const index = toBuyItems.findIndex(item => item.name === name);
     if (index === -1) return;
-    const newItems = [...items];
+    const newItems = [...toBuyItems];
     const [removedItem] = newItems.splice(index, 1);
     newItems.splice(index + direction, 0, removedItem);
-    setItems(newItems);
+    saveItems(newItems.concat(boughtItems));
+  };
+
+  const addOrIncrementItem = (name, quantity, unit) => {
+    const itemIndex = toBuyItems.findIndex(item => item.name === name);
+    if (itemIndex !== -1) {
+      const updatedItems = [...toBuyItems];
+      const existingQuantity = parseInt(updatedItems[itemIndex].quantity.split(' ')[0], 10);
+      updatedItems[itemIndex].quantity = `${existingQuantity + quantity} ${unit}`;
+      saveItems(updatedItems.concat(boughtItems));
+    } else {
+      const newItem = { name, quantity: `${quantity} ${unit}`, important: false, bought: false };
+      saveItems([...toBuyItems, newItem].concat(boughtItems));
+    }
   };
 
   const openModal = () => {
@@ -107,24 +132,24 @@ function HomePage({ user, onSignOut }) {
         <div className="w-1/2">
           <h2 className="text-3xl font-bold mb-4">To Buy</h2>
           <ShoppingListTable
-            items={items.filter(item => !item.bought)}
+            items={toBuyItems}
             toggleImportant={toggleImportant}
             toggleBought={toggleBought}
             deleteItem={deleteItem}
-            addOrIncrementItem={addOrIncrementItem}
             moveItem={moveItem}
+            addOrIncrementItem={addOrIncrementItem}
           />
         </div>
         <div className="w-1/2">
           <h2 className="text-3xl font-bold mb-4">Bought</h2>
           <ShoppingListTable
-            items={items.filter(item => item.bought)}
+            items={boughtItems}
             toggleImportant={toggleImportant}
             toggleBought={toggleBought}
-            deleteItem={deleteItem}
-            addOrIncrementItem={addOrIncrementItem}
+            deleteItem={(name) => deleteItem(name, true)}
             moveItem={moveItem}
-            isBoughtList={true}
+            addOrIncrementItem={addOrIncrementItem}
+            isBoughtList
           />
         </div>
       </div>
