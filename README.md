@@ -49,9 +49,9 @@ The Shopping List Manager is a web application that allows users to manage a sho
 
 To clone and run this application locally, follow these steps:
 ### Clone the repository:
-   - git clone <repository-url>
+   - git clone /repository-url/
 ### Backend (.NET Core API)
-   - git clone <repository-url>
+ 
    - cd Shopping-List/server
    - dotnet run
 ### Frontend (React Application)
