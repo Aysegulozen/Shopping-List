@@ -1,0 +1,24 @@
+# Node.js
+/node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Build directories
+build/
+dist/
+
+# .env files
+.env
+
+# OS files
+.DS_Store
+
+# .NET Core
+bin/
+obj/
