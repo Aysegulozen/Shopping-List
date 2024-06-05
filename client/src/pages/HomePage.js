@@ -127,6 +127,7 @@ function HomePage({ user, onSignOut }) {
   return (
     <div className="container mx-auto p-4 text-black">
       <h1 className="text-6xl font-bold mb-4">Shopping List</h1>
+      <br/>
       <AddItemForm
         newItemName={newItemName}
         setNewItemName={setNewItemName}

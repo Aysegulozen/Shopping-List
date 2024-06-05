@@ -11,7 +11,7 @@ export const ShoppingListTable = ({ items, toggleImportant, toggleBought, delete
   });
 
   return (
-    <Table className="bg-yellow-50">
+    <Table className={isBoughtList ? "bg-blue-50" : "bg-yellow-50"}>
       <Table.Head>
         <Table.HeadCell className="text-black"></Table.HeadCell>
         <Table.HeadCell className="text-black">Item Name</Table.HeadCell>
@@ -22,12 +22,15 @@ export const ShoppingListTable = ({ items, toggleImportant, toggleBought, delete
         {Array.isArray(sortedItems) && sortedItems.map((item, index) => (
           <Table.Row
             key={index}
-            className={`bg-yellow-50 dark:border-gray-700 dark:bg-gray-800 ${item.important ? 'bg-yellow-200 font-bold text-black' : ''} ${item.bought ? 'line-through text-black' : ''}`}
-          >
-            <Table.Cell className="flex space-x-2">
-              
+            className={`${isBoughtList ? "bg-blue-50" : "bg-yellow-50"} dark:border-gray-700 dark:bg-gray-800 ${item.important ? 'bg-yellow-200 font-bold text-black' : ''} ${item.bought ? 'line-through text-black' : ''}`}
+            >
+          
+          <Table.Cell className="flex space-x-2">
               {!isBoughtList && (
                 <>
+                  <Button size="xs" color="green" onClick={() => toggleBought(item.name)}>
+                    <FaCheck className={item.bought ? 'text-green-500' : ''} />
+                  </Button>
                   <Button size="xs" color="yellow" onClick={() => toggleImportant(item.name)}>
                     <FaStar className={item.important ? 'text-yellow-500' : ''} />
                   </Button>
@@ -64,7 +67,6 @@ export const ShoppingListTable = ({ items, toggleImportant, toggleBought, delete
     </Table>
   );
 };
-
 export const AddItemForm = ({
   newItemName,
   setNewItemName,
@@ -77,7 +79,7 @@ export const AddItemForm = ({
   const unitOptions = ['pcs', 'kg', 'gram', 'litre'];
 
   return (
-    <div className="mb-4 flex flex-col md:flex-row gap-4">
+    <div className="mb-4 flex flex-col md:flex-row gap-4 justify-center items-center">
       <TextInput
         type="text"
         value={newItemName}
