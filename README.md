@@ -19,11 +19,11 @@ The Shopping List Manager is a web application that allows users to manage a sho
 
 ## Deployed Page
 
-[Visit Page](https://aysegulozenportfolio.netlify.app/)
+[Visit Page](https://groceryshopping-list.netlify.app/)
 
 ## GitHub Repo
 
-[GitHub Repo](https://github.com/Aysegulozen/React-My-Portfolio)
+[GitHub Repo](https://github.com/Aysegulozen/Shopping-List)
 
 ## Technologies Used
 
@@ -53,7 +53,7 @@ To clone and run this application locally, follow these steps:
 ### Backend (.NET Core API)
    - git clone <repository-url>
    - cd Shopping-List/server
-   - dotnet run``````
+   - dotnet run
 ### Frontend (React Application)
    - cd Shopping-List/client
    - npm install
