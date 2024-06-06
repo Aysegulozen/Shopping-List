@@ -11,6 +11,7 @@
 - [Getting Started](#getting-started)
 - [Usage](#usage)
 - [License](#license)
+- [Screenshots](#screenshots)
 - [Live Demo](#live-demo)
 
 ## Overview
@@ -19,11 +20,11 @@ The Shopping List Manager is a web application that allows users to manage a sho
 
 ## Deployed Page
 
-[Visit Page](https://aysegulozenportfolio.netlify.app/)
+[Visit Page](https://groceryshopping-list.netlify.app/)
 
 ## GitHub Repo
 
-[GitHub Repo](https://github.com/Aysegulozen/React-My-Portfolio)
+[GitHub Repo](https://github.com/Aysegulozen/Shopping-List)
 
 ## Technologies Used
 
@@ -49,11 +50,10 @@ The Shopping List Manager is a web application that allows users to manage a sho
 
 To clone and run this application locally, follow these steps:
 ### Clone the repository:
-   - git clone <repository-url>
+   - git clone /repository-url/
 ### Backend (.NET Core API)
-   - git clone <repository-url>
    - cd Shopping-List/server
-   - dotnet run``````
+   - dotnet run
 ### Frontend (React Application)
    - cd Shopping-List/client
    - npm install
@@ -69,7 +69,12 @@ To clone and run this application locally, follow these steps:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License 
+
+## Screenshots
+
+![SignUp](./client/src/assets/images/signup-Screenshot%20.png)
+![Home](./client/src/assets/images/homepage-Screenshot%20.png)
 
 ## live-demo
 [Watch the Walkthrough Video](https://drive.google.com/file/d/1Jm2PpsdUsENU3zNaTgdcfKPZ3s8d3HRH/view?usp=sharing)
