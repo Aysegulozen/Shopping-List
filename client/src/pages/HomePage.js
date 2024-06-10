@@ -13,7 +13,7 @@ function HomePage({ user, onSignOut }) {
   const userId = user?.email || 'guest@example.com';
 
 useEffect(() => {
-  fetch(`http://localhost:5033/api/shoppinglist/${userId}`)
+  fetch(`http://localhost:8080/api/shoppinglist/${userId}`)
     .then(response => response.json())
     .then(data => {
       const toBuy = data.filter(item => !item.bought);
@@ -25,7 +25,7 @@ useEffect(() => {
 }, [userId]);
 
   const saveItems = (updatedItems) => {
-    fetch(`http://localhost:5033/api/shoppinglist/${userId}`, {
+    fetch(`http://localhost:8080/api/shoppinglist/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

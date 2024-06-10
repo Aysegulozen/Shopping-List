@@ -7,10 +7,13 @@ import './SignUpPage.css';
 const CLIENT_ID = '654502246790-78ejui2sfbgdhaa6k0pq1nnr49stjv10.apps.googleusercontent.com';
 
 function SignUpPage({ onLoginSuccess, onLoginFailure }) {
+  //Google login successful response
   const handleGoogleLoginSuccess = (credentialResponse) => {
     console.log('Google Login Success:', credentialResponse);
     try {
+      // Decode the JWT token to get user details
       const decodedToken = decodeJwtResponse(credentialResponse.credential);
+      // user details
       const user = {
         name: decodedToken.name,
         email: decodedToken.email,
@@ -22,17 +25,17 @@ function SignUpPage({ onLoginSuccess, onLoginFailure }) {
       onLoginFailure();
     }
   };
-
+// Google login failure response
   const handleGoogleLoginFailure = () => {
     console.log('Login Failed');
     onLoginFailure();
   };
-
+// guest login
   const handleGuestLogin = () => {
     const user = { name: 'Guest', email: 'guest@example.com', picture: guestAvatar };
     onLoginSuccess(user);
   };
-
+// 
   return (
     <div className="signup-container flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-4xl font-bold mb-4">Welcome to Shopping List</h1>
